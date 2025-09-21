@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exhibition Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<!-- CDN FA -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    /* Scroll ala Discord/Instagram */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+
+/* Slow spin untuk vinyl */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+  </style>
+</head>
+<body class="relative font-sans min-h-screen bg-gradient-to-br from-pink-500 via-pink-400 to-green-400">
+<!-- Tombol Musik Mengambang -->
+<div class="fixed top-4 right-4 z-50 group"> 
+  <!-- Tombol -->
+  <button id="musicBtn" 
+    class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg flex items-center justify-center hover:scale-110 transition-transform relative">
+    
+    <!-- Ikon -->
+    <i id="playIcon" class="fa-solid fa-play text-white text-2xl"></i>
+    <i id="pauseIcon" class="fa-solid fa-pause text-white text-2xl hidden"></i>
+  </button>
+
+
+</div>
+
+
+
+<!-- Audio Track -->
+<audio id="audioTrack" src="tegami.mp3"></audio>
+
+  <!-- Background mural -->
+  <div class="absolute inset-0 opacity-10">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="silhouette" patternUnits="userSpaceOnUse" width="200" height="200">
+          <circle cx="100" cy="100" r="80" fill="white" />
+          <rect x="50" y="50" width="100" height="100" fill="black" opacity="0.2"/>
+          <polygon points="0,200 200,200 100,0" fill="white" opacity="0.15"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#silhouette)" />
+    </svg>
+  </div>
+
+  <!-- Konten -->
+  <main class="relative z-10 max-w-3xl mx-auto bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+
+
+    <!-- Foto Profil -->
+    <div class="relative">
+      <img src="muncil.jpg" alt="Profile" class="w-full h-[26rem] object-cover">
+      <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-2 rounded-xl shadow">
+        <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          Fredelida Gamboa Masela <span class="text-blue-500">✔️</span>
+        </h2>
+        <p class="text-gray-700 text-sm">Artist • Narnians • Directioners 🎨✨</p>
+        <a href="https://www.instagram.com/gamboaartxyz/" target="_blank" 
+           rel="noopener noreferrer"
+           class="mt-2 inline-block px-4 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition text-white text-sm font-semibold rounded-full shadow">
+          Follow Me
+        </a>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+<div class="p-6 border-t max-h-64 overflow-y-auto space-y-2">
+
+  <!-- Bubble Intro (Hidden setelah klik enter) -->
+  <div id="introBubble" 
+       class="max-w-xs bg-green-200 px-4 py-2 rounded-2xl rounded-bl-sm shadow text-gray-800 font-medium text-sm">
+    Hello, you're invited to my first solo exhibition!
+  </div>
+
+  <!-- Input Nama -->
+  <div id="inputWrapper" class="flex items-center space-x-2 mb-4 mt-2">
+    <input id="visitorName" type="text" placeholder="Tulis namamu..." 
+           class="flex-1 px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <button id="startChat" 
+            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition">
+      Send
+    </button>
+  </div>
+
+  <!-- Bubble Chat -->
+  <div id="typing" 
+       class="hidden max-w-xs bg-green-100 px-4 py-2 rounded-2xl rounded-bl-sm shadow text-gray-800 font-medium text-sm relative">
+    <!-- teks muncul di sini -->
+  </div>
+</div>
+
+   <!-- Judul -->
+<div class="justify-center items-center text-center">
+<h2 class="text-center font-extrabold mb-2">
+  <span class="text-4xl md:text-6xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+    ✨ Soft Growth ✨
+  </span>
+  <br>
+  <span class="text-lg italic text-gray-600">“Tumbuh Dari Luka”</span>
+</h2>
+</div>
+
+<!-- Deskripsi -->
+<p class="mt-6 text-gray-700 leading-relaxed max-w-2xl mx-auto px-4 text-center">
+  Pameran ini adalah <span class="font-semibold text-pink-600">journey batin</span>, tentang menerima luka & kesunyian 
+  sebagai ruang untuk <span class="underline decoration-pink-400">tumbuh dengan lembut</span>.  
+  Setiap warna 🎨 adalah potongan rasa: sakit ➝ refleksi ➝ berubah jadi <span class="font-bold text-indigo-600">cahaya kecil</span> 
+  yang menyembuhkan.  
+  Lewat <span class="font-bold text-gray-900">Soft Growth</span>, aku mau bilang:  
+  <span class="italic text-purple-600">“di balik luka, ada versi kuat dari dirimu yang sedang tumbuh.”</span> 🌱
+</p>
+
+<!-- Divider Save the Date -->
+<div class="relative flex items-center mt-12 max-w-2xl mx-auto px-4">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-500 to-purple-500"></div>
+  <span class="flex-shrink underline mx-4 text-2xl font-extrabold text-gray-800 tracking-wide uppercase">
+    📅 Save the Date
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-purple-500 to-indigo-500"></div>
+</div>
+
+<!-- Kalender + Countdown Card -->
+<div class="max-w-2xl mx-auto mt-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 space-y-8">
+
+  <!-- Header Bulan -->
+  <div class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-bold rounded-xl shadow-md">
+    <span>September 2025</span>
+    <span class="text-sm opacity-90">28 Sept – 11 Okt</span>
+  </div>
+
+  <!-- Kalender -->
+  <div class="px-2 sm:px-6 py-4">
+    <div class="grid grid-cols-7 gap-3 text-center text-gray-700 text-sm">
+      <span class="font-semibold">Min</span>
+      <span class="font-semibold">Sen</span>
+      <span class="font-semibold">Sel</span>
+      <span class="font-semibold">Rab</span>
+      <span class="font-semibold">Kam</span>
+      <span class="font-semibold">Jum</span>
+      <span class="font-semibold">Sab</span>
+
+      <!-- Minggu ke-1 -->
+      <span class="text-gray-300">31</span>
+      <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+
+      <!-- Minggu ke-2 -->
+      <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+
+      <!-- Minggu ke-3 -->
+      <span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+
+      <!-- Minggu ke-4 -->
+      <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
+
+      <!-- Minggu ke-5 -->
+      <div class="relative flex items-center justify-center">
+        <span class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-red-500 font-bold text-red-600">28</span>
+        <span class="absolute -bottom-5 text-[11px] text-red-500 italic font-handwriting">D-Day</span>
+      </div>
+      <span>29</span><span>30</span>
+      <span class="text-gray-300">1</span><span class="text-gray-300">2</span><span class="text-gray-300">3</span><span class="text-gray-300">4</span>
+    </div>
+  </div>
+
+  <!-- Divider Countdown -->
+  <div class="flex items-center">
+    <div class="flex-grow border-t border-dashed border-gray-300"></div>
+    <span class="mx-4 text-sm font-medium text-gray-500">⏳ Countdown</span>
+    <div class="flex-grow border-t border-dashed border-gray-300"></div>
+  </div>
+
+  <!-- Countdown Cards -->
+  <div class="grid grid-cols-4 gap-3 max-w-xs mx-auto">
+    <div class="bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="days" class="text-lg font-extrabold text-purple-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Hari</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-indigo-100 to-pink-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="hours" class="text-lg font-extrabold text-indigo-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Jam</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="minutes" class="text-lg font-extrabold text-pink-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Menit</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="seconds" class="text-lg font-extrabold text-indigo-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Detik</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- Divider Lokasi -->
+<div class="relative flex items-center mt-12 max-w-2xl mx-auto px-4">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-500 to-purple-500"></div>
+  <span class="flex-shrink underline mx-4 text-2xl font-extrabold text-gray-800 tracking-wide uppercase">
+    📍 Where to Go
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-purple-500 to-indigo-500"></div>
+</div>
+
+<!-- Info Lokasi -->
+<div class="max-w-2xl mx-auto mt-6 px-6">
+  <div class="bg-white/60 backdrop-blur-2xl rounded-2xl shadow-lg p-6 text-center relative overflow-hidden">
+    
+    <!-- Accent Gradient Glow -->
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-tr from-pink-400 to-indigo-400 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gradient-to-tr from-indigo-400 to-pink-400 rounded-full blur-3xl opacity-30"></div>
+    
+    <p class="relative z-10 text-lg font-medium text-gray-800">
+      <span class="font-extrabold text-indigo-600 text-xl">Lumintu Registered</span><br>
+      <span class="italic text-gray-600">Gg. Ampera, Jl. Veteran, Purwakarta</span>
+    </p>
+  </div>
+</div>
+
+<!-- Google Maps Embed -->
+<div class="rounded-2xl overflow-hidden shadow-xl mt-8 max-w-2xl mx-auto border border-gray-200">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15857.9051866327!2d107.44729358164386!3d-6.525057747400005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sid!4v1695324000000!5m2!1sen!2sid"
+    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+    class="rounded-t-2xl">
+  </iframe>
+
+  <!-- Tombol Open in Google Maps -->
+  <div class="p-6 text-center bg-white/70 backdrop-blur-xl">
+    <a href="https://www.google.com/maps/search/?api=1&query=Lumintu+Registered,+Purwakarta" target="_blank"
+      class="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white text-lg font-extrabold rounded-full shadow-lg hover:scale-110 hover:shadow-2xl transition-all duration-300 ease-out">
+      🚀 Open in Google Maps
+    </a>
+  </div>
+</div>
+
+
+
+  </div>
+
+</div>
+
+
+
+<!-- Katalog -->
+<div class="p-6 border-t bg-white rounded-2xl shadow-lg mt-6">
+  <!-- Divider + Title -->
+  <div class="flex items-center mb-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <h3 class="px-4 text-xl font-bold text-gray-800 text-center">Gallery Catalogue</h3>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-6">
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan1.jpg" 
+       alt="Artwork 1" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  <div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan2.jpg" 
+       alt="Artwork 2" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+<div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+
+   
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan3.jpg" 
+       alt="Artwork 3" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+ <div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+    
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan4.jpg" 
+       alt="Artwork 4" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+ <div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan5.jpg" 
+       alt="Artwork 5" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+ <div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan6.jpg" 
+       alt="Artwork 6" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  <div class="p-4">
+  <div class="flex items-center gap-2">
+    <h4 class="font-bold text-gray-800 text-lg">Dreams</h4>
+    <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+  </div>
+
+  <p class="text-sm text-gray-500 mb-1">
+    Media: Watercolor on Paper | Size: 28x39 cm
+  </p>
+  <p class="text-gray-600 text-sm mb-3">
+    A painting that captures the first light of hope after long nights of silence.
+  </p>
+  <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+    “Every sunrise holds a promise.” <br> — Thank you for supporting my art ✨
+  </div>
+</div>
+</div>
+
+  </div>
+</div>
+
+
+      </div>
+    </div>
+<!-- Divider -->
+<div class="relative flex items-center mt-12 max-w-3xl mx-auto px-6">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-400 via-purple-400 to-indigo-400"></div>
+  <span class="flex-shrink mx-4 text-lg font-semibold text-gray-600 italic">
+    ✨ With Gratitude ✨
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-indigo-400 via-purple-400 to-pink-400"></div>
+</div>
+
+<!-- Thank You Note -->
+<footer class="max-w-3xl mx-auto mt-2 px-6 py-12 text-center">
+  <div class="bg-white/60 backdrop-blur-xl rounded-2xl shadow-md p-6 relative overflow-hidden">
+    
+    <!-- Decorative Glow -->
+    <div class="absolute -top-8 -left-8 w-32 h-32 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full blur-3xl opacity-20"></div>
+    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-tr from-indigo-400 to-pink-400 rounded-full blur-3xl opacity-20"></div>
+    
+    <p class="relative z-10 text-gray-700 text-base leading-relaxed">
+      From the depths of my heart, <br>
+      <span class="font-bold text-purple-600">thank you for supporting this exhibition</span>.  
+      Every step of this journey is possible because of your kindness, curiosity, and love for art.  
+    </p>
+    <p class="mt-4 text-sm text-gray-500 italic">— Fredelida Gamboa Masela🖌️</p>
+  </div>
+</footer>
+
+  </main>
+
+<script>
+
+ let visitorName = "";
+const text2 = "So... enjoy it! and thank you for ur support ❤️❤️❤️";
+const text3 = "With love, your friend, Fredelida Gamboa Masela.";
+let i = 0, current = 1;
+let text1 = ""; // akan diisi setelah input nama
+
+document.getElementById("startChat").addEventListener("click", () => {
+  const input = document.getElementById("visitorName");
+  if(input.value.trim() !== ""){
+    visitorName = input.value.trim();
+    text1 = `Hello ${visitorName}! this is my first solo exhibition...`;
+
+    // sembunyikan input dan intro
+    document.getElementById("inputWrapper").style.display = "none";
+    document.getElementById("introBubble").style.display = "none";
+
+    // tampilkan bubble chat
+    const bubble = document.getElementById("typing");
+    bubble.classList.remove("hidden");
+
+    // mulai typewriter
+    typeWriter();
+  }
+});
+function typeWriter() {
+  const el = document.getElementById("typing");
+
+  let currentText = current === 1 ? text1 : current === 2 ? text2 : text3;
+
+  if(i < currentText.length){
+    el.innerHTML = buildBubble(currentText.substring(0, i+1));
+    i++;
+    setTimeout(typeWriter, current === 2 || current === 3 ? 70 : 60);
+  } else {
+    setTimeout(() => {
+      i = 0;
+      current = current === 1 ? 2 : current === 2 ? 3 : 1; // loop terus
+      typeWriter();
+    }, 1000);
+  }
+}
+
+function buildBubble(text){
+  return `
+    <div class="relative">
+      <span>${text}</span>
+      <div class="text-[10px] text-gray-500 flex items-center gap-1 absolute bottom-0 right-0 pr-1 pb-0.5">
+        09:25 <span class="text-blue-500">✔</span>
+      </div>
+    </div>
+  `;
+}
+
+// Countdown Timer (Bahasa Indonesia)
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minutesEl = document.getElementById('minutes');
+const secondsEl = document.getElementById('seconds');
+
+// Ganti tanggal & jam sesuai acara
+const eventDate = new Date("Sep 28, 2025 10:00:00").getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = eventDate - now;
+
+  if(distance < 0){
+    daysEl.innerHTML = hoursEl.innerHTML = minutesEl.innerHTML = secondsEl.innerHTML = "0";
+    return;
+  }
+
+  const hari = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const jam = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000*60*60));
+  const menit = Math.floor((distance % (1000 * 60 * 60)) / (1000*60));
+  const detik = Math.floor((distance % (1000 * 60)) / 1000);
+
+  daysEl.innerHTML = hari;
+  hoursEl.innerHTML = jam;
+  minutesEl.innerHTML = menit;
+  secondsEl.innerHTML = detik;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+const musicBtn = document.getElementById('musicBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const audioTrack = document.getElementById('audioTrack');
+
+let isPlaying = false;
+
+musicBtn.addEventListener('click', () => {
+  isPlaying = !isPlaying;
+  if(isPlaying){
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+    audioTrack.play();
+    musicBtn.classList.add('animate-spin-slow'); // tombol berputar
+  } else {
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+    audioTrack.pause();
+    musicBtn.classList.remove('animate-spin-slow');
+  }
+});
+
+audioTrack.addEventListener('ended', () => {
+  isPlaying = false;
+  playIcon.classList.remove('hidden');
+  pauseIcon.classList.add('hidden');
+  musicBtn.classList.remove('animate-spin-slow');
+});
+
+</script>
+</body>
+</html>
