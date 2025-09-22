@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GamboaArt Exhibition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" type="image/png" href="logo-exh.jpg">
+<!-- CDN FA -->
+<!-- Tambahin di <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    /* Scroll ala Discord/Instagram */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+
+/* Slow spin untuk vinyl */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+  </style>
+</head>
+<body class="relative font-sans min-h-screen bg-gradient-to-br from-pink-500 via-pink-400 to-green-400">
+<!-- Tombol Musik Mengambang -->
+<div class="fixed top-4 right-4 z-50 group"> 
+  <!-- Tombol -->
+  <button id="musicBtn" 
+    class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg flex items-center justify-center hover:scale-110 transition-transform relative">
+    
+    <!-- Ikon -->
+    <i id="playIcon" class="fa-solid fa-play text-white text-2xl"></i>
+    <i id="pauseIcon" class="fa-solid fa-pause text-white text-2xl hidden"></i>
+  </button>
+
+
+</div>
+
+
+
+<!-- Audio Track -->
+<audio id="audioTrack" src="tegami.mp3"></audio>
+
+<!-- Modal -->
+<div id="introModal" class="fixed inset-0 z-[999] bg-black/50 backdrop-blur-sm flex items-center justify-center hidden">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-[90%] h-[80vh] flex flex-col animate__animated">
+    <!-- Header -->
+   <!-- Header -->
+<div class="text-center pt-6">
+  <h2 class="text-3xl font-serif tracking-wide text-pink-600 font-bold mb-1 relative inline-block">
+    <span class="px-4">✦ PENGANTAR ✦</span>
+    <span class="absolute left-0 right-0 -bottom-1 mx-auto h-[2px] w-3/4 bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400"></span>
+  </h2>
+  <p class="text-base text-gray-500 italic mt-3 mb-4">oleh Vanka</p>
+</div>
+
+    
+    <!-- Scrollable Content -->
+    <div class="px-6 pb-6 overflow-y-auto text-gray-600 text-sm space-y-4">
+      <p>
+        <span class="underline decoration-wavy decoration-pink-400">Penerimaan diri</span> merupakan landasan penting bagi setiap individu di muka bumi. 
+        Ia adalah upaya untuk menerima dan memahami seluruh aspek dalam diri. Dengan penerimaan diri, seseorang terbantu untuk belajar dari kegagalan 
+        dan kesalahan di masa lalu, memandangnya sebagai kesempatan untuk berkembang sekaligus mengoptimalkan potensi. Dari sana lahir rasa bangga 
+        pada diri sendiri, baik atas kelebihan maupun kekurangan.
+      </p>
+
+      <p>
+        <mark class="bg-yellow-200 px-1">Tumbuh dari Luka</mark> adalah kiasan yang menunjukkan bagaimana seseorang dapat menjadi kuat, tegar, 
+        dan bijaksana setelah melewati rasa sakit atau penderitaan. Luka yang diolah mengubah cara pandang terhadap hidup. Setelah melalui masa-masa itu, 
+        seseorang tidak lagi sama seperti sebelumnya: ia tumbuh menjadi lebih <span class="text-purple-600 font-semibold">kuat</span> dan matang, 
+        lebih berhati-hati dalam melangkah, serta menjadikan pengalaman pahit sebagai pelajaran berharga untuk terus berkembang.
+      </p>
+
+      <p>
+        Dalam pameran bertajuk <span class="font-bold text-indigo-600">Soft Growth</span>, seniman mengajak pengamat menyelami perjalanan menerima luka 
+        dan kesunyian sebagai ruang pertumbuhan. Setiap sapuan warna yang dituangkan adalah potongan perasaan dari sakit terdalam, yang menjelma menjadi 
+        refleksi, lalu bertransformasi menjadi <span class="underline decoration-wavy decoration-green-500">cahaya kecil</span> yang menyembuhkan.
+      </p>
+
+      <p>
+        <span class="font-bold text-pink-600">Soft Growth</span> adalah representasi untuk menikmati setiap karya, sekaligus memandang 
+        <mark class="bg-blue-100 px-1">luka</mark> sebagai bagian dari cara semesta menunjukkan kasih sayangnya.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-4 border-t text-center">
+      <button id="closeModal"
+        class="px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-semibold shadow-md hover:scale-105 transition">
+        Let's Go 🚀
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Background mural -->
+  <div class="absolute inset-0 opacity-10">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="silhouette" patternUnits="userSpaceOnUse" width="200" height="200">
+          <circle cx="100" cy="100" r="80" fill="white" />
+          <rect x="50" y="50" width="100" height="100" fill="black" opacity="0.2"/>
+          <polygon points="0,200 200,200 100,0" fill="white" opacity="0.15"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#silhouette)" />
+    </svg>
+  </div>
+
+  <!-- Konten -->
+ <main class="relative z-10 max-w-3xl mx-auto bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+
+
+
+    <!-- Foto Profil -->
+    <div class="relative">
+      <img src="muncil.jpg" alt="Profile" class="w-full h-[26rem] object-cover">
+     <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur px-5 py-4 rounded-2xl shadow-lg border border-gray-100 max-w-sm w-[90%] sm:w-auto">
+  <!-- Header: Nama + Verified -->
+  <h2 class="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+    Fredelida Gamboa Masela 
+    <i class="fa-solid fa-circle-check text-blue-500 text-base"></i>
+  </h2>
+
+  <!-- Bio -->
+  <p class="text-gray-600 text-sm mt-1 leading-snug">
+    Artist • Narnians • Directioners 🎨✨
+  </p>
+
+  <!-- Action -->
+  <div class="mt-3">
+    <a href="https://www.instagram.com/gamboaartxyz/" target="_blank" 
+       rel="noopener noreferrer"
+       class="inline-flex items-center justify-center gap-2 px-5 py-1.5
+              bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500
+              hover:scale-105 transition-transform text-white text-sm font-semibold 
+              rounded-full shadow-md">
+      Follow
+    </a>
+  </div>
+</div>
+
+    </div>
+
+    <!-- Chat Section -->
+<div class="p-6 border-t max-h-64 overflow-y-auto space-y-2">
+
+  <!-- Bubble Intro (Hidden setelah klik enter) -->
+  <div id="introBubble" 
+       class="max-w-xs bg-green-200 px-4 py-2 rounded-2xl rounded-bl-sm shadow text-gray-800 font-medium text-sm">
+    Hello, you're invited to my first solo exhibition!
+  </div>
+
+  <!-- Input Nama -->
+  <div id="inputWrapper" class="flex items-center space-x-2 mb-4 mt-2">
+    <input id="visitorName" type="text" placeholder="Tulis namamu..." 
+           class="flex-1 px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <button id="startChat" 
+            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition">
+      Send
+    </button>
+  </div>
+
+  <!-- Bubble Chat -->
+  <div id="typing" 
+       class="hidden max-w-xs bg-green-100 px-4 py-2 rounded-2xl rounded-bl-sm shadow text-gray-800 font-medium text-sm relative">
+    <!-- teks muncul di sini -->
+  </div>
+</div>
+
+   <!-- Judul -->
+<div class="justify-center items-center text-center">
+<h2 class="text-center font-extrabold mb-2">
+  <span class="text-4xl md:text-6xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+    ✨ Soft Growth ✨
+  </span>
+  <br>
+  <span class="text-lg italic text-gray-600">“Tumbuh Dari Luka”</span>
+</h2>
+</div>
+
+<!-- Deskripsi -->
+<p class="mt-6 text-gray-700 leading-relaxed max-w-2xl mx-auto px-4 text-center">
+  Halo, aku <span class="font-semibold text-pink-600">Fredelida Gamboa Masela</span>. Aku suka banget bereksperimen dengan berbagai media, dan sekarang lagi <span class="italic">deep dive</span> ke <span class="underline decoration-pink-400">watercolor</span> dan <span class="underline decoration-pink-400">gouache</span>. Dua media ini seru banget buat menangkap <span class="italic">vibe</span> dan emosi yang unik. Jadi setiap lukisan itu punya ceritanya sendiri, penuh lapisan dan nuansa.
+  Lewat pameran <span class="font-bold text-gray-900">✨ Soft Growth ✨</span> ini, aku mengajak kalian menyelami perjalananku menerima luka dan kesunyian sebagai ruang untuk tumbuh. 🌱
+Setiap sapuan warna 🎨 adalah potongan dari rasa sakit yang mendalam ➝ menjadi refleksi ➝ lalu berubah jadi <span class="font-bold text-indigo-600">cahaya kecil</span> yang menyembuhkan. Ini adalah caraku bilang:  
+  <span class="italic text-purple-600">“di balik setiap luka, ada versi kuat dari dirimu yang sedang tumbuh.”</span> 🌱
+</p>
+
+<!-- Divider Save the Date -->
+<div class="relative flex items-center mt-12 max-w-2xl mx-auto px-6 sm:px-6">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-500 to-purple-500"></div>
+  <span class="flex-shrink underline [text-decoration-style:wavy] mx-4 text-2xl font-extrabold text-gray-800 tracking-wide uppercase">
+    📅 Save the Date
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-purple-500 to-indigo-500"></div>
+</div>
+
+<!-- Kalender + Countdown Card -->
+<div class="max-w-2xl mx-auto mt-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 space-y-8">
+
+  <!-- Header Bulan -->
+  <div class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-bold rounded-xl shadow-md">
+    <span>September 2025</span>
+    <span class="text-sm opacity-90">28 Sept – 11 Okt</span>
+  </div>
+
+  <!-- Kalender -->
+  <div class="px-2 sm:px-6 py-4">
+    <div class="grid grid-cols-7 gap-3 text-center text-gray-700 text-sm">
+      <span class="font-semibold">Min</span>
+      <span class="font-semibold">Sen</span>
+      <span class="font-semibold">Sel</span>
+      <span class="font-semibold">Rab</span>
+      <span class="font-semibold">Kam</span>
+      <span class="font-semibold">Jum</span>
+      <span class="font-semibold">Sab</span>
+
+      <!-- Minggu ke-1 -->
+      <span class="text-gray-300">31</span>
+      <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+
+      <!-- Minggu ke-2 -->
+      <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+
+      <!-- Minggu ke-3 -->
+      <span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+
+      <!-- Minggu ke-4 -->
+      <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
+
+      <!-- Minggu ke-5 -->
+      <div class="relative flex items-center justify-center">
+        <span class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-red-500 font-bold text-red-600">28</span>
+        <span class="absolute -bottom-5 text-[11px] text-red-500 italic font-handwriting">D-Day</span>
+      </div>
+      <span>29</span><span>30</span>
+      <span class="text-gray-300">1</span><span class="text-gray-300">2</span><span class="text-gray-300">3</span><span class="text-gray-300">4</span>
+    </div>
+  </div>
+
+  <!-- Divider Countdown -->
+  <div class="flex items-center">
+    <div class="flex-grow border-t border-dashed border-gray-300"></div>
+    <span class="mx-4 text-sm font-medium text-gray-500">⏳ Countdown</span>
+    <div class="flex-grow border-t border-dashed border-gray-300"></div>
+  </div>
+
+  <!-- Countdown Cards -->
+  <div class="grid grid-cols-4 gap-3 max-w-xs mx-auto">
+    <div class="bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="days" class="text-lg font-extrabold text-purple-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Hari</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-indigo-100 to-pink-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="hours" class="text-lg font-extrabold text-indigo-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Jam</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="minutes" class="text-lg font-extrabold text-pink-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Menit</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl shadow-md w-16 h-16 flex flex-col items-center justify-center hover:scale-110 transition">
+      <span id="seconds" class="text-lg font-extrabold text-indigo-700">--</span>
+      <span class="text-xs text-gray-600 mt-1">Detik</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- Divider Lokasi -->
+<div class="relative flex items-center mt-12 max-w-2xl mx-auto px-4 sm:px-6">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-500 to-purple-500"></div>
+  <span class="flex-shrink underline [text-decoration-style:wavy] mx-4 text-2xl font-extrabold text-gray-800 tracking-wide uppercase">
+    📍 Where to Go
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-purple-500 to-indigo-500"></div>
+</div>
+
+<!-- Info Lokasi -->
+<div class="max-w-2xl mx-auto mt-6 px-6">
+  <div class="bg-white/60 backdrop-blur-2xl rounded-2xl shadow-lg p-6 text-center relative overflow-hidden">
+    
+    <!-- Accent Gradient Glow -->
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-tr from-pink-400 to-indigo-400 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gradient-to-tr from-indigo-400 to-pink-400 rounded-full blur-3xl opacity-30"></div>
+    
+    <p class="relative z-10 text-lg font-medium text-gray-800">
+      <span class="font-extrabold text-indigo-600 text-xl">Lumintu Registered</span><br>
+      <span class="italic text-gray-600">Gg. Ampera, Jl. Veteran, Purwakarta</span>
+    </p>
+  </div>
+</div>
+
+<!-- Google Maps Embed -->
+<div class="rounded-2xl overflow-hidden shadow-xl mt-8 max-w-2xl mx-auto border border-gray-200">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15857.9051866327!2d107.44729358164386!3d-6.525057747400005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sid!4v1695324000000!5m2!1sen!2sid"
+    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+    class="rounded-t-2xl">
+  </iframe>
+
+  <!-- Tombol Open in Google Maps -->
+  <div class="p-6 text-center bg-white/70 backdrop-blur-xl">
+    <a href="https://www.google.com/maps/search/?api=1&query=Lumintu+Registered,+Purwakarta" target="_blank"
+      class="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white text-lg font-extrabold rounded-full shadow-lg hover:scale-110 hover:shadow-2xl transition-all duration-300 ease-out">
+      🚀 Open in Google Maps
+    </a>
+  </div>
+</div>
+
+
+
+  </div>
+
+</div>
+
+
+
+<!-- Katalog -->
+<div class="p-6 border-t bg-white rounded-2xl shadow-lg mt-6">
+  <!-- Divider + Title -->
+  <div class="flex items-center mb-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <h3 class="px-4 text-xl font-bold text-gray-800 text-center">Gallery Catalogue</h3>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-6">
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan1.jpg" 
+       alt="Artwork 1" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Dreaming</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 29x42 cm
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Lukisan ini adalah cermin dari perjalananku keluar dari ruang keterpurukan. 
+      Ada masa ketika segalanya terasa gelap, ketika aku merasa kehilangan arah dan 
+      nyaris melupakan arti dari harapan itu sendiri. Namun, dalam proses melukis, 
+      aku menemukan kembali bahwa bahkan di titik terendah, mimpi masih bisa tumbuh.
+    </p>
+
+    <p>
+      Figur perempuan dalam lukisan ini aku hadirkan sebagai perwujudan diriku sendiri, 
+      seseorang yang mencoba melihat dunia dengan cara baru. Dari matanya lahir imaji penuh warna: 
+      kupu-kupu yang bebas, bunga teratai yang mekar, dan simbol-simbol alam yang merepresentasikan 
+      keheningan sekaligus kehidupan baru. Semua itu menjadi lambang bahwa harapan tak pernah benar-benar hilang, 
+      ia hanya tertutup oleh luka dan kesedihan, menunggu waktu untuk kembali bersinar.
+    </p>
+
+    <p>
+      Dreaming adalah pengakuanku bahwa aku ingin bangkit. Bahwa aku percaya, meski hidup penuh dengan jatuh bangun, 
+      selalu ada ruang untuk bernafas, bermimpi, dan menumbuhkan harapan. Melalui karya ini, aku ingin mengingatkan 
+      diriku sendiri dan mungkin juga siapa saja yang melihatnya, bahwa tidak ada keterpurukan yang benar-benar abadi. 
+      Selama kita masih berani bermimpi, selalu ada kemungkinan untuk menemukan kembali cahaya.
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+
+   <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan2.jpg" 
+       alt="Artwork 2" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Mother of Earth</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Landscape · Watercolor on Paper · 21x38 cm (A4)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Lukisan ini adalah doa sekaligus perlawanan.
+Doa agar bumi dan perempuan senantiasa mampu merawat, menumbuhkan, dan menyembuhkan.
+Serta perlawanan agar tubuh, seperti halnya bumi, tidak hanya dipandang sebagai sesuatu yang bisa diambil,
+tetapi juga dihargai, dirayakan, dan disyukuri keberadaannya.
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+
+   
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan3.jpg" 
+       alt="Artwork 3" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Me 1</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2024)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 21x38 cm (A4)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Potret aku di 2024
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+    
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan4.jpg" 
+       alt="Artwork 4" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Me 2</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2023)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 21x38 cm (A4)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Potret aku di 2023
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan5.jpg" 
+       alt="Artwork 5" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Tegami</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Sebuah refleksi visual tentang ruang imajinasi anak-anak yang kerap terhimpit oleh tuntutan dunia orang dewasa. Di zaman serba cepat dan kompetitif, anak-anak sering kali dipaksa melihat dunia melalui kacamata orang dewasa. Mereka dituntut untuk berlari sebelum belajar berjalan, diarahkan sebelum sempat bermimpi. Akibatnya, ruang untuk berkhayal, bermain, dan menemukan jati diri mereka perlahan menyempit.
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+
+  <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan6.jpg" 
+       alt="Artwork 6" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Tercekik!</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Dalam karya ini, aku ingin menghadirkan sebuah refleksi tentang keterhubungan perempuan dengan alam yang kian terputus. Gurita yang membelit tubuh anak perempuan menjadi simbol dari jeratan tak kasatmata. Eksploitasi, ketidakadilan, dan kerakusan yang tidak hanya mencekik bumi, tetapi juga membatasi ruang hidup perempuan.
+    </p>
+	<p>Lembaran uang yang terapung dan wajah-wajah yang tercerai-berai menyingkap kenyataan pahit. Kerusakan alam sering kali lahir dari kepentingan ekonomi yang menyingkirkan nilai kehidupan. Dan ketika alam kehilangan keseimbangannya, perempuanlah yang pertama kali merasakan dampaknya dari hilangnya sumber air, pangan, hingga ruang aman untuk bertumbuh.</p>
+	<p>Tercekik adalah jeritan sekaligus pengingat bahwa membebaskan alam berarti juga membebaskan perempuan merawat bumi berarti juga merawat kehidupan.</p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+<!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan7.jpg" 
+       alt="Artwork 7" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class=" items-center gap-2 mb-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Joy is an Act of Resistance</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Landscape · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Aku selalu percaya bahwa jalan menuju pengetahuan untuk perempuan tidak pernah benar-benar lurus dan mudah. Ada begitu banyak tembok, suara yang meremehkan, bahkan aturan yang mencoba membatasi langkahku. Dalam lukisan ini, aku menggambarkan diriku dikelilingi buku-buku, seakan pengetahuan ada di mana-mana, tetapi tetap harus kuperjuangkan untuk bisa kugenggam.
+    </p>
+	<p>
+	Buku di tanganku adalah simbol perjalanan itu, di dalamnya ada rahim dengan matahari, karena bagiku pengetahuan juga adalah kehidupan. Ia melahirkan keberanian, harapan, dan rasa percaya bahwa aku punya tempat di dunia ini. Tulisan “Joy is an act of resistance” adalah mantra yang selalu kuingat: bahwa menemukan kebahagiaan, terutama melalui belajar, adalah bentuk perlawanan paling indah yang bisa aku lakukan.
+	</p>
+	<p>
+	Lewat karya ini aku ingin berkata bahwa meskipun jalannya panjang dan sering terasa melelahkan, aku memilih untuk tetap berjalan. Aku memilih untuk terus membaca, terus memahami, dan terus bahagia. Karena itu sendiri adalah bukti bahwa aku melawan.
+	</p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+ <!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan8.jpg" 
+       alt="Artwork 8" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Si Tua Mayor</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Landscape · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Lukisan "Si Tua Mayor" adalah interpretasi visual dari buku Animal Farm karya George Orwell. Melalui karya ini, aku coba gambarkan cerita tentang keserakahan, manipulasi, dan korupsi pangan yang terasa dekat dengan realitas kita.
+Di meja makan ini, seharusnya semua hewan bisa menikmati hasil jerih payah bersama. Tapi yang terjadi, hanya "figur penting" yang menikmati hidangan mewah sementara yang lain hanya bisa melihat. Uang kertas menjadi simbol nyata dari sistem yang korup 
+Karakter-karakter ini tidak hanya sekadar hewan, mereka adalah cerminan dari manusia dan perilaku mereka. Di balik meja yang terlihat harmonis, ada ketidakadilan dan ketidaksetaraan yang terus terjadi.
+    </p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+<!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan9.jpg" 
+       alt="Artwork 9" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="flex items-center gap-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">Cermin</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Potrait · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Di hadapan cermin, wajah yang tampak bukan sekadar pantulan, melainkan percakapan sunyi antara luka dan harapan. Tubuh yang duduk tenang menyimpan resah, sementara bayangan di balik kaca seakan hendak keluar, menggeliat mencari ruang untuk bernapas.
+    </p>
+	<p>Lukisan ini lahir dari bait lagu Nadin Amizah, “Sudah tugasku menjadi sembuh.” Sebuah kalimat yang sederhana, namun menyimpan perlawanan lembut: bahwa kesembuhan bukan sekadar keajaiban yang turun dari langit, melainkan perjalanan yang harus dipeluk dengan sabar.
+</p>
+<p>Kucing yang duduk tenang adalah penanda kehangatan, keintiman kecil yang membuat dunia tak terasa terlalu asing. Buku-buku yang berserakan adalah jejak pengetahuan, pengingat bahwa kita selalu bisa belajar dari cerita lain untuk merajut kembali diri yang retak.
+</p>
+<p>Cermin bukan hanya tentang melihat siapa diri kita hari ini, melainkan keberanian untuk menerima siapa diri kita yang pernah runtuh, dan siapa yang perlahan-lahan tengah tumbuh. Di sana, sembuh bukan akhir, ia adalah tugas yang terus berulang, setiap kali kita menatap diri sendiri.
+</p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+<!-- Item 1 -->
+<div class="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden group">
+  <img src="lukisan10.jpg" 
+       alt="Artwork 10" 
+       class="w-full h-[500px] object-cover group-hover:scale-105 transition">
+  
+  <div class="p-4">
+    <!-- Judul & Tahun -->
+    <div class="items-center gap-2 mb-2">
+      <h4 class="font-bold text-gray-800 text-lg mb-2">The Worst Person in the World</h4>
+      <span class="text-xs text-gray-400">(Year Made: 2025)</span>
+    </div>
+
+<!-- Media -->
+<p class="inline-block px-3 py-1 text-xs bg-purple-200 rounded-full text-gray-600 mb-3">
+  Landscape · Watercolor on Paper · 29x42 cm (A3)
+</p>
+
+
+
+<!-- Deskripsi dengan Read More -->
+<div class="text-gray-600 text-sm mb-3 relative space-y-3">
+  <span class="description-line block">
+    <p>
+      Terinspirasi dari film dengan judul yang sama, lukisan ini berbicara tentang bagaimana keputusan seorang perempuan sering kali dipertanyakan, direndahkan, atau bahkan diremehkan. Tiga figur perempuan hadir dengan wujud yang ambigu, dihiasi bunga, sayap, dan ikan sebagai simbol dari kerentanan sekaligus kekuatan yang mereka miliki.
+    </p>
+	<p>Lukisan ini merefleksikan tekanan sosial yang membuat perempuan kerap merasa harus menanyakan kembali eksistensinya: apakah aku salah? apakah pilihanku sah? apakah aku cukup berharga? Di balik warna-warna cerah yang penuh imaji, tersimpan perasaan getir tentang bagaimana perempuan sering kali dilihat bukan dari dirinya sendiri, melainkan dari kaca mata orang lain.
+</p>
+<p>The Worst Person in the World bukanlah pengakuan bersalah, melainkan perlawanan halus terhadap label dan penghakiman. Ia adalah pernyataan bahwa setiap keputusan seorang perempuan adalah sahih, dan bahwa eksistensi mereka tidak memerlukan validasi dari dunia yang gemar mengekang.
+</p>
+  </span>
+
+  <button class="read-more text-blue-500 hover:underline text-xs"></button>
+</div>
+
+
+    <!-- Footer -->
+    <div class="mt-3 border-t pt-2 text-xs text-gray-500 italic">
+      — Thank you for supporting my art ✨
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+      </div>
+    </div>
+<!-- Divider -->
+<div class="relative flex items-center mt-12 max-w-3xl mx-auto px-6">
+  <div class="flex-grow border-t border-gradient-to-r from-pink-400 via-purple-400 to-indigo-400"></div>
+  <span class="flex-shrink mx-4 text-lg font-semibold text-gray-600 italic">
+    ✨ With Gratitude ✨
+  </span>
+  <div class="flex-grow border-t border-gradient-to-r from-indigo-400 via-purple-400 to-pink-400"></div>
+</div>
+
+<!-- Thank You Note -->
+<footer class="max-w-3xl mx-auto mt-2 px-6 py-12 text-center">
+  <div class="bg-white/60 backdrop-blur-xl rounded-2xl shadow-md p-6 relative overflow-hidden">
+    
+    <!-- Decorative Glow -->
+    <div class="absolute -top-8 -left-8 w-32 h-32 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full blur-3xl opacity-20"></div>
+    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-tr from-indigo-400 to-pink-400 rounded-full blur-3xl opacity-20"></div>
+    
+    <p class="relative z-10 text-gray-700 text-base leading-relaxed">
+      From the depths of my heart, <br>
+      <span class="font-bold text-purple-600">thank you for supporting this exhibition</span>.  
+      Every step of this journey is possible because of your kindness, curiosity, and love for art.  
+    </p>
+    <p class="mt-4 text-sm text-gray-500 italic">— Fredelida Gamboa Masela🖌️</p>
+  </div>
+</footer>
+
+  </main>
+
+<script>
+
+ let visitorName = "";
+const text2 = "So... enjoy it! and thank you for ur support ❤️❤️❤️";
+const text3 = "With love, your friend, Fredelida Gamboa Masela.";
+let i = 0, current = 1;
+let text1 = ""; // akan diisi setelah input nama
+
+document.getElementById("startChat").addEventListener("click", () => {
+  const input = document.getElementById("visitorName");
+  if(input.value.trim() !== ""){
+    visitorName = input.value.trim();
+    text1 = `Hello ${visitorName}! this is my first solo exhibition...`;
+
+    // sembunyikan input dan intro
+    document.getElementById("inputWrapper").style.display = "none";
+    document.getElementById("introBubble").style.display = "none";
+
+    // tampilkan bubble chat
+    const bubble = document.getElementById("typing");
+    bubble.classList.remove("hidden");
+
+    // mulai typewriter
+    typeWriter();
+  }
+});
+function typeWriter() {
+  const el = document.getElementById("typing");
+
+  let currentText = current === 1 ? text1 : current === 2 ? text2 : text3;
+
+  if(i < currentText.length){
+    el.innerHTML = buildBubble(currentText.substring(0, i+1));
+    i++;
+    setTimeout(typeWriter, current === 2 || current === 3 ? 70 : 60);
+  } else {
+    setTimeout(() => {
+      i = 0;
+      current = current === 1 ? 2 : current === 2 ? 3 : 1; // loop terus
+      typeWriter();
+    }, 1000);
+  }
+}
+
+function buildBubble(text){
+  return `
+    <div class="relative">
+      <span>${text}</span>
+      <div class="text-[10px] text-gray-500 flex items-center gap-1 absolute bottom-0 right-0 pr-1 pb-0.5">
+        09:25 <span class="text-blue-500">✔</span>
+      </div>
+    </div>
+  `;
+}
+
+// Countdown Timer (Bahasa Indonesia)
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minutesEl = document.getElementById('minutes');
+const secondsEl = document.getElementById('seconds');
+
+// Ganti tanggal & jam sesuai acara
+const eventDate = new Date("Sep 28, 2025 10:00:00").getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = eventDate - now;
+
+  if(distance < 0){
+    daysEl.innerHTML = hoursEl.innerHTML = minutesEl.innerHTML = secondsEl.innerHTML = "0";
+    return;
+  }
+
+  const hari = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const jam = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000*60*60));
+  const menit = Math.floor((distance % (1000 * 60 * 60)) / (1000*60));
+  const detik = Math.floor((distance % (1000 * 60)) / 1000);
+
+  daysEl.innerHTML = hari;
+  hoursEl.innerHTML = jam;
+  minutesEl.innerHTML = menit;
+  secondsEl.innerHTML = detik;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+const musicBtn = document.getElementById('musicBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const audioTrack = document.getElementById('audioTrack');
+
+let isPlaying = false;
+
+musicBtn.addEventListener('click', () => {
+  isPlaying = !isPlaying;
+  if(isPlaying){
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+    audioTrack.play();
+    musicBtn.classList.add('animate-spin-slow'); // tombol berputar
+  } else {
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+    audioTrack.pause();
+    musicBtn.classList.remove('animate-spin-slow');
+  }
+});
+
+audioTrack.addEventListener('ended', () => {
+  isPlaying = false;
+  playIcon.classList.remove('hidden');
+  pauseIcon.classList.add('hidden');
+  musicBtn.classList.remove('animate-spin-slow');
+});
+
+document.querySelectorAll(".description-line").forEach(desc => {
+    const fullText = desc.innerText.trim();
+    const words = fullText.split(" ");
+    const readMoreBtn = desc.nextElementSibling;
+    
+    if (words.length > 50) {
+      const shortText = words.slice(0, 50).join(" ") + "...";
+      desc.innerText = shortText;
+      readMoreBtn.innerText = "Read More";
+      readMoreBtn.addEventListener("click", () => {
+        if (readMoreBtn.innerText === "Read More") {
+          desc.innerText = fullText;
+          readMoreBtn.innerText = "Read Less";
+        } else {
+          desc.innerText = shortText;
+          readMoreBtn.innerText = "Read More";
+        }
+      });
+    } else {
+      readMoreBtn.style.display = "none";
+    }
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("introModal");
+    const modalBox = modal.querySelector("div");
+    const closeBtn = document.getElementById("closeModal");
+
+    // Selalu tampilkan modal setiap refresh
+    modal.classList.remove("hidden");
+    modalBox.classList.add("animate__fadeInDown");
+
+    closeBtn.addEventListener("click", () => {
+      modalBox.classList.remove("animate__fadeInDown");
+      modalBox.classList.add("animate__fadeOutUp");
+
+      setTimeout(() => {
+        modal.classList.add("hidden");
+      }, 600);
+    });
+  });
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
